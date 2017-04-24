@@ -70,6 +70,7 @@ export default {
       lastUpdate: {},
       marker: undefined,
       infoWindow: undefined,
+      timeout: undefined,
       armorTypes: {
         leather_helmet: 1, leather_chestplate: 3, leather_leggings: 2, leather_boots: 1,
         chain_helmet: 2, chain_chestplate: 5, chain_leggings: 4, chain_boots: 1,
@@ -89,6 +90,7 @@ export default {
     }
   },
   beforeDestroy () {
+    clearTimeout(this.timeout)
     if(typeof this.infoWindow !== 'undefined') {
       this.infoWindow.close() // close the InfoWindow (probably not needed, but let's be consistant)
       this.infoWindow.setMap(null)
@@ -102,15 +104,15 @@ export default {
       this.$http.get(`api/player/${this.uuid}?key=${window.settings.webapi.key}`)
       .then((response) => {
         this.player = response.data.player
-        setTimeout(() => {
+        this.timeout = setTimeout(() => {
           this.fetchPlayer()
-        }, 500)
+        }, 1000)
       })
       .catch((err) => {
         // silent fail (throws an error if user disconnects between updates)
-        setTimeout(() => {
+        this.timeout = setTimeout(() => {
           this.fetchPlayer()
-        }, 10000)
+        }, 5000)
       })
     },
     showInfoWindow () {

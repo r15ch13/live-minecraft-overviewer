@@ -10,26 +10,30 @@ import PlayerListEntry from './PlayerListEntry.vue'
 export default {
   data () {
     return {
-      players: []
+      players: [],
+      timeout: undefined
     }
   },
   mounted () {
     this.fetchPlayers()
+  },
+  beforeDestroy () {
+    clearTimeout(this.timeout)
   },
   methods: {
     fetchPlayers () {
       this.$http.get(`api/player?key=${window.settings.webapi.key}`)
       .then((response) => {
         this.players = response.data.players
-        setTimeout(() => {
+        this.timeout = setTimeout(() => {
           this.fetchPlayers()
         }, 2000)
       })
       .catch((err) => {
         // silent fail (throws an error if user disconnects between updates)
-        setTimeout(() => {
+        this.timeout = setTimeout(() => {
           this.fetchPlayers()
-        }, 10000)
+        }, 5000)
       })
     }
   },

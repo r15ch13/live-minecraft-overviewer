@@ -13,12 +13,16 @@ import PlayerList from './PlayerList.vue'
 export default {
   data () {
     return {
-      info: { players: 0, maxPlayers: -1 }
+      info: { players: 0, maxPlayers: -1 },
+      timeout: undefined
     }
   },
   mounted () {
     this.fetchInfo()
     overviewer.util.initialize()
+  },
+  beforeDestroy () {
+    clearTimeout(this.timeout)
   },
   methods: {
     fetchInfo () {
@@ -26,15 +30,15 @@ export default {
       .then((response) => {
         this.info = response.data
         document.title = this.info.motd
-        setTimeout(() => {
+        this.timeout = setTimeout(() => {
           this.fetchInfo()
         }, 2000)
       })
       .catch((err) => {
         // silent fail (throws an error if user disconnects between updates)
-        setTimeout(() => {
+        this.timeout = setTimeout(() => {
           this.fetchInfo()
-        }, 10000)
+        }, 5000)
       })
     }
   },
