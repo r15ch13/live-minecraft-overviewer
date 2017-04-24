@@ -1,5 +1,5 @@
 <template>
-  <li @click="showInfoWindow" v-show="player">
+  <li @click="toggleInfoWindow" v-show="player">
     <img :src="smallHelm" />
     <span class="position">{{ name }} {{ position.x }}, {{ position.y }}, {{ position.z }}</span>
     <div class="infoWindow" v-show="false">
@@ -70,6 +70,7 @@ export default {
       lastUpdate: {},
       marker: undefined,
       infoWindow: undefined,
+      listener: undefined,
       timeout: undefined,
       armorTypes: {
         leather_helmet: 1, leather_chestplate: 3, leather_leggings: 2, leather_boots: 1,
@@ -87,6 +88,7 @@ export default {
     player () {
       this.updateMarker()
       this.updateInfoWindow()
+      this.addMarkerClickListener()
     }
   },
   beforeDestroy () {
@@ -115,7 +117,7 @@ export default {
         }, 5000)
       })
     },
-    showInfoWindow () {
+    toggleInfoWindow () {
       if(typeof this.infoWindow === 'undefined') return
       let map = this.infoWindow.getMap()
       if (map !== null && typeof map !== 'undefined') {
@@ -166,6 +168,13 @@ export default {
       markerImage.scaledSize = size
 
       return markerImage
+    },
+    addMarkerClickListener () {
+      if(!google.maps.event.hasListeners(this.marker, 'click')) {
+        google.maps.event.addListener(this.marker, 'click', () => {
+          this.toggleInfoWindow()
+        })
+      }
     }
   },
   computed: {
