@@ -26,24 +26,24 @@
         </div>
         <div class="indicator" v-show="hasFoodProperty">
           <span>Food:</span>
-          <div class="full" v-for="n in Math.floor(food.current / 2)">🍗</div>
+          <div class="full" v-bind:key="'f'+n" v-for="n in Math.floor(food.current / 2)">🍗</div>
           <div class="half" v-if="food.current % 2 === 1">🍗</div>
-          <div class="empty" v-for="n in Math.floor((food.max - food.current) / 2)">🍗</div>
+          <div class="empty" v-bind:key="'e'+n" v-for="n in Math.floor((food.max - food.current) / 2)">🍗</div>
         </div>
         <div class="indicator">
-          <span>Armor:</span>
-          <div class="full" v-for="n in Math.floor(armor.current / 2)">🛡️</div>
-          <div class="half" v-if="armor.current % 2 === 1">🛡️</div>
-          <div class="empty" v-for="n in Math.floor((armor.max - armor.current) / 2)">🛡️</div>
+          <span>Armor: </span>
+          <div class="full" v-bind:key="'f'+n" v-for="n in Math.floor(armorValue / 2)">🛡️</div>
+          <div class="half" v-if="armorValue % 2 === 1">🛡️</div>
+          <div class="empty" v-bind:key="'e'+n" v-for="n in Math.floor((20 - armorValue) / 2)">🛡️</div>
         </div>
         <div class="indicator" v-show="hasHealthProperty">
           <span>Health:</span>
-          <div class="full" v-for="n in Math.floor(health.current / 2)">❤️</div>
+          <div class="full" v-bind:key="'f'+n" v-for="n in Math.floor(health.current / 2)">❤️</div>
           <div class="full" v-if="health.percent % 2 >= 1.5 && health.percent % 2 <= 2  && health.current !== 20 && health.current !== 0">❤️</div>
           <div class="half" v-if="health.percent % 2 >= 1   && health.percent % 2 < 1.5 && health.current !== 20 && health.current !== 0">❤️</div>
           <div class="full" v-if="health.percent % 2 >= 0.5 && health.percent % 2 < 1   && health.current !== 20 && health.current !== 0">❤️</div>
           <div class="half" v-if="health.percent % 2 >= 0   && health.percent % 2 < 0.5 && health.current !== 20 && health.current !== 0">❤️</div>
-          <div class="empty" v-for="n in Math.floor((health.max - health.current) / 2)">❤️</div>
+          <div class="empty" v-bind:key="'e'+n" v-for="n in Math.floor((health.max - health.current) / 2)">❤️</div>
         </div>
       </div>
     </div>
@@ -231,19 +231,17 @@ export default {
       }
       return { current: this.player.food.foodLevel || 0, max: 20 }
     },
-    armor () {
-      if(!this.player || !this.player.armour) {
-        return { current: 0, max: 20 }
-      }
+    armorValue () {
       let sum = 0
-      Object.keys(this.player.armour).forEach((v, k) => {
-        if (typeof this.player.armour[v] !== 'object' || this.player.armour[v] === null) return
-        let type = this.player.armour[v].id.replace('minecraft:', '')
+      Object.values(['helmet', 'chestplate', 'leggings', 'boots']).forEach((v) => {
+        if (typeof this.player[v] !== 'object' || this.player[v] === null) return
+        let type = this.player[v].type.id.replace('minecraft:', '')
         if (typeof this.armorTypes[type] !== 'undefined') {
           sum += this.armorTypes[type]
         }
       })
-      return { current: sum, max: 20 }
+      return sum
+    },
     hasGamemodeProperty () {
       return this.player && this.player.gameMode
     },
