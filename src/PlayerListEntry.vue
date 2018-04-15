@@ -107,7 +107,7 @@ export default {
     fetchPlayer () {
       axios.get(`player/${this.uuid}`)
       .then((response) => {
-        this.player = response.data.player
+        this.player = response.data
         this.timeout = setTimeout(() => {
           this.fetchPlayer()
         }, 1000)

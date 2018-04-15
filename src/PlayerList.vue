@@ -26,7 +26,7 @@ export default {
     fetchPlayers () {
       axios.get(`player`)
       .then((response) => {
-        this.players = response.data.players
+        this.players = response.data
         this.timeout = setTimeout(() => {
           this.fetchPlayers()
         }, 5000)
