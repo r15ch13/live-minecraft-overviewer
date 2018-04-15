@@ -14,7 +14,7 @@
         </div>
         <div class="indicator">
           <span>Latency:</span>
-          <div>{{ latency }}</div>
+          <div>{{ latency }} ms</div>
         </div>
         <div class="indicator" v-show="hasGamemodeProperty">
           <span>Gamemode:</span>
@@ -259,8 +259,8 @@ export default {
       return this.player.statistics.deaths || 0
     },
     latency () {
-      if(!this.player || !this.player.connection) return 0
-      return this.player.connection.latency || 0
+      if(!this.player || !this.player.latency) return 0
+      return this.player.latency || 0
     }
   }
 }
