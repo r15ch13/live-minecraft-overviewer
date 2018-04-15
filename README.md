@@ -14,21 +14,37 @@ Proxy for the Web-API endpoints. Allowing only GET-Requests because Web-API has 
 location /api {
     proxy_pass http://localhost:<webapi-port>/api;
     proxy_http_version 1.1;
-    add_header 'Access-Control-Allow-Headers' 'Authorization,X-Requested-With,Content-Type';
-    add_header 'Access-Control-Allow-Origin' '*';
+
+    # allow authentication header
     add_header 'Access-Control-Allow-Headers' 'X-WEBAPI-KEY';
+
+    # pre-flight info is valid for 20 days
+    add_header 'Access-Control-Max-Age' 1728000;
+
+    # only allow GET and OPTIONS methods
     add_header 'Allow' 'GET, OPTIONS';
+
+    # disable logs
+    access_log off;
+    error_log off;
 }
 ```
 ### Caddy
 ```
 proxy /api localhost:<webapi-port> {
-    header_downstream Access-Control-Allow-Origin "*"
+    # allow authentication header
     header_downstream Access-Control-Allow-Headers "X-WEBAPI-KEY"
+
+    # pre-flight info is valid for 20 days
+    header_downstream Access-Control-Max-Age 1728000
+
+    # only allow GET and OPTIONS methods
     header_downstream Allow "GET, OPTIONS"
 }
 ```
-## Setup
+## Installation
+
+### Copy webassets
 ```
 # copy file to webassets directory, so overviewer will use them
 cp index.html <minecraft>/webassets
@@ -39,6 +55,38 @@ window.settings = {
     webapi: {
         url: 'https://<minecraft-webapi-url>',
         key: 'API_KEY'
+    }
+}
+```
+### Change WebAPI Settings
+Apply the following changes to `config/webapi/permissions.conf`.
+
+Disable the whitelist because everyone needs access to the API
+```
+useWhitelist=false
+```
+
+Add an non rate limited `overviewer` key with the following permissions.
+```
+keys {
+    overviewer {
+        permissions {
+            info="*"
+            player {
+                list {
+                    "*"=true
+                    address=false
+                    location {
+                        world {
+                            "*"=false
+                            name=true
+                        }
+                    }
+                    uuid=false
+                }
+            }
+        }
+        rateLimit=0
     }
 }
 ```
