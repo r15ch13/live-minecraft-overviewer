@@ -1,7 +1,7 @@
 <template>
   <ul >
     <li v-show="!players.length">No players online</li>
-    <player-list-entry v-for="item in players" :key="item.uuid" :uuid="item.uuid" :name="item.name"></player-list-entry>
+    <player-list-entry v-for="item in players" :initPosition="item.location.position" :key="item.uuid" :uuid="item.uuid" :name="item.name"></player-list-entry>
   </ul>
 </template>
 

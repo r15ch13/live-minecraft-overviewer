@@ -64,6 +64,15 @@ export default {
       type: String,
       required: true,
       default: '00000000-0000-0000-0000-000000000000'
+    },
+    initPosition: {
+      type: Object,
+      required: true,
+      default: {
+        x: 0,
+        y: 0,
+        z: 0
+      }
     }
   },
   data () {
@@ -188,7 +197,11 @@ export default {
     },
     position () {
       if(!this.player || !this.player.location || !this.player.location.position) {
-        return { x: 0, y: 0, z: 0 }
+        return {
+          x: Math.floor(this.initPosition.x),
+          y: Math.floor(this.initPosition.y),
+          z: Math.floor(this.initPosition.z)
+        }
       }
       return {
         x: Math.floor(this.player.location.position.x),
