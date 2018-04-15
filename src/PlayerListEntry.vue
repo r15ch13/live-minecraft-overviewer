@@ -16,15 +16,15 @@
           <span>Latency:</span>
           <div>{{ latency }}</div>
         </div>
-        <div class="indicator">
+        <div class="indicator" v-show="hasGamemodeProperty">
           <span>Gamemode:</span>
           <div>{{ gameMode }}</div>
         </div>
-        <div class="indicator">
+        <div class="indicator" v-show="hasStatisticsProperty">
           <span>Deaths:</span>
           <div>{{ deaths }}</div>
         </div>
-        <div class="indicator">
+        <div class="indicator" v-show="hasFoodProperty">
           <span>Food:</span>
           <div class="full" v-for="n in Math.floor(food.current / 2)">🍗</div>
           <div class="half" v-if="food.current % 2 === 1">🍗</div>
@@ -36,7 +36,7 @@
           <div class="half" v-if="armor.current % 2 === 1">🛡️</div>
           <div class="empty" v-for="n in Math.floor((armor.max - armor.current) / 2)">🛡️</div>
         </div>
-        <div class="indicator">
+        <div class="indicator" v-show="hasHealthProperty">
           <span>Health:</span>
           <div class="full" v-for="n in Math.floor(health.current / 2)">❤️</div>
           <div class="full" v-if="health.percent % 2 >= 1.5 && health.percent % 2 <= 2  && health.current !== 20 && health.current !== 0">❤️</div>
@@ -209,8 +209,11 @@ export default {
         z: Math.floor(this.player.location.position.z)
       }
     },
+    hasHealthProperty() {
+      return this.player && this.player.health
+    },
     health () {
-      if(!this.player || !this.player.health) {
+      if(!this.hasHealthProperty) {
         return { current: 0, max: 20, percent: 0 }
       }
       return {
@@ -219,8 +222,11 @@ export default {
         percent: this.player.health.current / this.player.health.max * 100
       }
     },
+    hasFoodProperty() {
+      return this.player && this.player.food
+    },
     food () {
-      if(!this.player || !this.player.food) {
+      if(!this.hasFoodProperty) {
         return { current: 0, max: 20 }
       }
       return { current: this.player.food.foodLevel || 0, max: 20 }
@@ -238,10 +244,15 @@ export default {
         }
       })
       return { current: sum, max: 20 }
+    hasGamemodeProperty () {
+      return this.player && this.player.gameMode
     },
     gameMode () {
-      if(!this.player) return ''
+      if(!this.hasGamemodeProperty) return ''
       return this.player.gameMode === 'minecraft:survival' ? 'Survival' : 'Creative'
+    },
+    hasStatisticsProperty () {
+      return this.player && this.player.statistics
     },
     deaths () {
       if(!this.player || !this.player.statistics) return 0
