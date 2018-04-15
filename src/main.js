@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import App from './App.vue'
+import axios from 'axios'
 import AsyncComputed from 'vue-async-computed'
-import VueResource from 'vue-resource'
 
-Vue.use(VueResource)
 Vue.use(AsyncComputed)
 
-Vue.http.options.root = window.settings.webapi.url
+axios.defaults.baseURL = `${window.config.api.url}/api/v5/`
+axios.defaults.headers.common['Content-Type'] = 'application/json'
+axios.defaults.headers.common['X-WEBAPI-KEY'] = window.config.api.key
 
 new Vue({
   el: '#app',

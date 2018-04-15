@@ -10,6 +10,8 @@
 
 <script>
 import PlayerList from './PlayerList.vue'
+import axios from 'axios'
+
 export default {
   data () {
     return {
@@ -26,7 +28,7 @@ export default {
   },
   methods: {
     fetchInfo () {
-      this.$http.get(`api/info?key=${window.settings.webapi.key}`)
+      axios.get('info')
       .then((response) => {
         this.info = response.data
         document.title = this.info.motd

@@ -51,6 +51,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   props: {
     name: {
@@ -103,7 +105,7 @@ export default {
   },
   methods: {
     fetchPlayer () {
-      this.$http.get(`api/player/${this.uuid}?key=${window.settings.webapi.key}`)
+      axios.get(`player/${this.uuid}`)
       .then((response) => {
         this.player = response.data.player
         this.timeout = setTimeout(() => {

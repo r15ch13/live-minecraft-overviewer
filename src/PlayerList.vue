@@ -7,6 +7,8 @@
 
 <script>
 import PlayerListEntry from './PlayerListEntry.vue'
+import axios from 'axios'
+
 export default {
   data () {
     return {
@@ -22,7 +24,7 @@ export default {
   },
   methods: {
     fetchPlayers () {
-      this.$http.get(`api/player?key=${window.settings.webapi.key}`)
+      axios.get(`player`)
       .then((response) => {
         this.players = response.data.players
         this.timeout = setTimeout(() => {
