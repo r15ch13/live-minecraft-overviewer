@@ -2,6 +2,10 @@
 
 > Show live player positions on Minecraft Overviewer
 
+- Inspired by [PlayerMarkers](https://github.com/overviewer/Minecraft-Overviewer-Addons/tree/master/PlayerMarkers)
+- Uses [Minotar](https://minotar.net) for player heads
+- Build with [Vue.js](https://vuejs.org/)
+
 ## Requirements
 - [Minecraft Overviewer](https://overviewer.org/)
 - [Sponge Forge](https://www.spongepowered.org/downloads) or [Sponge Vanilla](https://www.spongepowered.org/downloads)
@@ -9,12 +13,17 @@
 
 ## Installation
 
-### Copy web assets
+### Configure Minecraft Overviewer
 Copy `index.html` and `dist` to the `webassets` directory, so Overviewer will use them on the next update.
 
 ```bash
 λ cp index.html <minecraft>/webassets
 λ cp -r dist/ <minecraft>/webassets
+```
+
+Add [`customwebassets`](http://docs.overviewer.org/en/latest/config/#custom-web-assets) option to you Overviewer config file
+```python
+customwebassets = "<minecraft>/webassets"
 ```
 
 Add your Web-API URL and the `overviewer` API key to `index.html`.
@@ -26,7 +35,7 @@ window.settings = {
     }
 }
 ```
-### Change Web-API Settings
+### Configure Web-API
 Apply the following changes to `<minecraft>/config/webapi/permissions.conf`.
 
 Disable the whitelist because the API has to be accessible for everyone.
@@ -42,14 +51,24 @@ keys {
             info="*"
             player {
                 list {
-                    "*"=true
-                    # hide client IP
-                    address=false
+                    "*"=false
+                    location="*"
+                    name=true
+                    uuid=true
                 }
                 one {
-                    "*"=true
-                    # hide client IP
-                    address=false
+                    boots="*"
+                    chestplate="*"
+                    experience="*"
+                    food="*"
+                    gameMode="*"
+                    health="*"
+                    helmet="*"
+                    latency=true
+                    leggings="*"
+                    location="*"
+                    name=true
+                    uuid=true
                 }
             }
         }
@@ -59,7 +78,7 @@ keys {
 }
 ```
 
-### Webserver proxy settings
+### Configure Webserver
 Add proxy settings for the Web-API endpoints to allow the `X-WEBAPI-KEY` header.
 #### Nginx
 ```nginx
@@ -100,6 +119,9 @@ proxy /api localhost:<webapi-port> {
 # install dependencies
 npm install
 
+# let webpack proxy all traffic to a running Minecraft Overviewer
+export WEBPACK_PROXY_MINECRAFT_API='<minecraft-overviewer>'
+
 # serve with hot reload at localhost:8080
 npm run dev
 
@@ -108,3 +130,6 @@ npm run build
 ```
 
 For a detailed explanation of how things work, consult the [docs for vue-loader](https://vue-loader.vuejs.org/en/).
+
+# License
+[The MIT License (MIT)](http://r15ch13.mit-license.org/)
