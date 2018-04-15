@@ -210,7 +210,7 @@ export default {
       }
     },
     hasHealthProperty() {
-      return this.player && this.player.health
+      return !!(this.player && this.player.health)
     },
     health () {
       if(!this.hasHealthProperty) {
@@ -223,7 +223,7 @@ export default {
       }
     },
     hasFoodProperty() {
-      return this.player && this.player.food
+      return !!(this.player && this.player.food)
     },
     food () {
       if(!this.hasFoodProperty) {
@@ -243,11 +243,11 @@ export default {
       return sum
     },
     hasGamemodeProperty () {
-      return this.player && this.player.gameMode
+      return !!(this.player && this.player.gameMode)
     },
     gameMode () {
       if(!this.hasGamemodeProperty) return ''
-      return this.player.gameMode === 'minecraft:survival' ? 'Survival' : 'Creative'
+      return this.player.gameMode.id === 'minecraft:survival' ? 'Survival' : 'Creative'
     },
     hasStatisticsProperty () {
       return this.player && this.player.statistics
