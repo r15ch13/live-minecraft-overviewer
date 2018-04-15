@@ -34,13 +34,13 @@ export default {
         document.title = this.info.motd
         this.timeout = setTimeout(() => {
           this.fetchInfo()
-        }, 2000)
+        }, 5000)
       })
       .catch((err) => {
         // silent fail (throws an error if user disconnects between updates)
         this.timeout = setTimeout(() => {
           this.fetchInfo()
-        }, 5000)
+        }, 8000)
       })
     }
   },

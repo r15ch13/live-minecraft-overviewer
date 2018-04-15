@@ -29,13 +29,13 @@ export default {
         this.players = response.data.players
         this.timeout = setTimeout(() => {
           this.fetchPlayers()
-        }, 2000)
+        }, 5000)
       })
       .catch((err) => {
         // silent fail (throws an error if user disconnects between updates)
         this.timeout = setTimeout(() => {
           this.fetchPlayers()
-        }, 5000)
+        }, 8000)
       })
     }
   },
