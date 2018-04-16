@@ -31,6 +31,7 @@ export default {
     fetchInfo () {
       if(window.config.demo) {
         this.info = info()
+        document.title = `[v${this.info.minecraftVersion}] ${this.info.motd}`
         this.timeout = setTimeout(() => {
           this.fetchInfo()
         }, 5000)
