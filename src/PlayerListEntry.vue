@@ -3,11 +3,11 @@
     <img :src="smallHelm" />
     <span class="position">{{ name }} {{ position.x }}, {{ position.y }}, {{ position.z }}</span>
     <div class="infoWindow" v-show="false">
-      <div class="header">
+      <div class="header" :class="uuid">
         <img :src="bigHelm" />
         <h1>{{ name }}</h1>
       </div>
-      <div class="indicators">
+      <div class="indicators" :class="uuid">
         <div class="indicator">
           <span>Location:</span>
           <div>{{ position.x }}, {{ position.y }}, {{ position.z }}</div>
@@ -83,6 +83,7 @@ export default {
       infoWindow: undefined,
       listener: undefined,
       timeout: undefined,
+      infoWindowIsOpen: false,
       armorTypes: {
         leather_helmet: 1, leather_chestplate: 3, leather_leggings: 2, leather_boots: 1,
         chain_helmet: 2, chain_chestplate: 5, chain_leggings: 4, chain_boots: 1,
@@ -132,8 +133,10 @@ export default {
       if(typeof this.infoWindow === 'undefined') return
       let map = this.infoWindow.getMap()
       if (map !== null && typeof map !== 'undefined') {
+        this.infoWindowIsOpen = false
         this.infoWindow.close()
       } else {
+        this.infoWindowIsOpen = true
         this.infoWindow.open(this.marker.getMap(), this.marker)
       }
     },
@@ -142,8 +145,11 @@ export default {
     },
     updateInfoWindow () {
       this.createInfoWindow()
-      this.infoWindow.setContent(this.$el.querySelector('.infoWindow').innerHTML)
-      this.infoWindow.setPosition(this.getMapLocation()) // Set the InfoWindow position on the map
+      if(this.infoWindowIsOpen) {
+        // only update .indicators to prevent reloading the bigHelm image on every update
+        $('#mcmap').find(`.indicators.${this.uuid}`).html(this.$el.querySelector('.indicators').innerHTML)
+        this.infoWindow.setPosition(this.getMapLocation()) // Set the InfoWindow position on the map
+      }
     },
     createInfoWindow () {
       if (typeof this.infoWindow !== 'undefined') return
@@ -284,6 +290,7 @@ span.position {
 }
 .header img {
   width: 50px;
+  height: 50px;
   float: left;
 }
 .header h1 {
