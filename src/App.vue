@@ -40,7 +40,7 @@ export default {
       axios.get('info')
       .then((response) => {
         this.info = response.data
-        document.title = this.info.motd
+        document.title = `[v${this.info.minecraftVersion}] ${this.info.motd}`
         this.timeout = setTimeout(() => {
           this.fetchInfo()
         }, 5000)
