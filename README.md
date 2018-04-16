@@ -1,6 +1,6 @@
 # Live Minecraft Overviewer
 
-> Show live player positions on Minecraft Overviewer
+> Show live player positions on Minecraft Overviewer ([Demo](https://maps.lovo-online.de/demo/))
 
 - Inspired by [PlayerMarkers](https://github.com/overviewer/Minecraft-Overviewer-Addons/tree/master/PlayerMarkers)
 - Uses [Minotar](https://minotar.net) for player heads
@@ -12,6 +12,7 @@
 - [Web-API Plugin](https://ore.spongepowered.org/Valandur/Web-API)
 
 ## Installation
+Follow to [instructions](https://github.com/Valandur/Web-API#installation) on how to install the Web-API and move with these steps:
 
 ### Configure Minecraft Overviewer
 Copy `index.html` and `dist` to the `webassets` directory, so Overviewer will use them on the next update.
@@ -35,6 +36,7 @@ window.settings = {
     }
 }
 ```
+
 ### Configure Web-API
 Apply the following changes to `<minecraft>/config/webapi/permissions.conf`.
 
@@ -89,6 +91,7 @@ keys {
 
 ### Configure Webserver
 Add proxy settings for the Web-API endpoints to allow the `X-WEBAPI-KEY` header.
+
 #### Nginx
 ```nginx
 location /api {
@@ -109,6 +112,7 @@ location /api {
     error_log off;
 }
 ```
+
 #### Caddy
 ```caddyfile
 proxy /api localhost:<webapi-port> {
