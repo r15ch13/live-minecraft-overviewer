@@ -10,6 +10,7 @@
 
 <script>
 import PlayerList from './PlayerList.vue'
+import { info } from './demo.js'
 import axios from 'axios'
 
 export default {
@@ -28,6 +29,14 @@ export default {
   },
   methods: {
     fetchInfo () {
+      if(window.config.demo) {
+        this.info = info()
+        this.timeout = setTimeout(() => {
+          this.fetchInfo()
+        }, 5000)
+        return
+      }
+
       axios.get('info')
       .then((response) => {
         this.info = response.data

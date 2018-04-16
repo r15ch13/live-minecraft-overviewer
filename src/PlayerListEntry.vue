@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import { player } from './demo.js'
 import axios from 'axios'
 
 export default {
@@ -115,6 +116,14 @@ export default {
   },
   methods: {
     fetchPlayer () {
+      if(window.config.demo) {
+        this.player = player()
+        this.timeout = setTimeout(() => {
+          this.fetchPlayer()
+        }, 1500)
+        return
+      }
+
       axios.get(`player/${this.uuid}`)
       .then((response) => {
         this.player = response.data

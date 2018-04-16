@@ -7,6 +7,7 @@
 
 <script>
 import PlayerListEntry from './PlayerListEntry.vue'
+import { playerList } from './demo.js'
 import axios from 'axios'
 
 export default {
@@ -24,7 +25,15 @@ export default {
   },
   methods: {
     fetchPlayers () {
-      axios.get(`player`)
+      if(window.config.demo) {
+        this.players = playerList()
+        this.timeout = setTimeout(() => {
+          this.fetchPlayers()
+        }, 5000)
+        return
+      }
+
+      axios.get('player')
       .then((response) => {
         this.players = response.data
         this.timeout = setTimeout(() => {
