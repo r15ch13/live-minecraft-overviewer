@@ -48,7 +48,16 @@ Add an `overviewer` key with the following permissions.
 keys {
     overviewer {
         permissions {
-            info="*"
+            info {
+                "*"=false
+                info {
+                    "*"=false
+                    motd=true
+                    players=true
+                    maxPlayers=true
+                    minecraftVersion=true
+                }
+            }
             player {
                 list {
                     "*"=false
